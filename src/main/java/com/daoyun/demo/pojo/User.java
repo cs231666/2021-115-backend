@@ -48,6 +48,9 @@ public class User implements Serializable, UserDetails {
 
     private String realname;
 
+    @TableField("student_id")
+    private Integer studentId;
+
     private String phone;
 
     private String email;

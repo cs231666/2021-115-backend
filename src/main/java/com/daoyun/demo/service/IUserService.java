@@ -45,4 +45,6 @@ public interface IUserService extends IService<User> {
     ReturnInfo getUserById(Integer id);
 
     ReturnInfo deleteUser(String username);
+
+    ReturnInfo getUserInfoByToken(HttpServletRequest request);
 }

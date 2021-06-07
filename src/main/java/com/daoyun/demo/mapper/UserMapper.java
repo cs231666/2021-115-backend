@@ -31,6 +31,12 @@ public interface UserMapper extends BaseMapper<User> {
     @Insert("INSERT INTO login(username,login_time,token) VALUES(#{username},#{loginTime},#{token})")
     void insertInLoginByCode(String username, LocalDateTime loginTime, String token);
 
+    @Insert("UPDATE login SET login_time = #{loginTime} Where username = #{username}")
+    void updateInLoginByGitHub(String username, LocalDateTime loginTime);
+
     @Delete("DELETE FROM login where username = #{username}")
     void deleteLogin(String username);
+
+    @Select("SELECT u.* FROM user u, login l WHERE l.token = #{token} and u.username = l.username")
+    User getUserInfoByToken(String token);
 }

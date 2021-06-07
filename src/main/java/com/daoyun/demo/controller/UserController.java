@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
 
@@ -59,22 +60,40 @@ public class UserController {
         }
     }
 
+    /**
+     * Principal拿不到值，换种方法
+     * @param
+     * @return
+     */
+//    @ApiOperation(value = "获取当前用户信息")
+//    @GetMapping("/info")
+//    public ReturnInfo getUserInfo(Principal principal) {
+//        System.out.println("principal:" + principal);
+//        try {
+//            if (null == principal) {
+//                return null;
+//            }
+//            String username = principal.getName();
+//            System.out.println("username:"+ username);
+//            User user = iUserService.getUserByUserName(username);
+//            user.setPassword(null);
+//            return ReturnInfo.success("查询成功",user);
+//        }catch (Exception e){
+//            return  ReturnInfo.error("查询失败");
+//        }
+//    }
+
     @ApiOperation(value = "获取当前用户信息")
     @GetMapping("/info")
-    public ReturnInfo getUserInfo(Principal principal) {
-        try {
-            if (null == principal) {
-                return null;
-            }
-            String username = principal.getName();
+    public ReturnInfo getUserInfo(HttpServletRequest request) {
 
-            User user = iUserService.getUserByUserName(username);
-            user.setPassword(null);
-            return ReturnInfo.success("查询成功",user);
+        try {
+           return this.iUserService.getUserInfoByToken(request);
         }catch (Exception e){
             return  ReturnInfo.error("查询失败");
         }
     }
+
     @ApiOperation("通过id查找用户")
     @GetMapping("{id}")
     public  ReturnInfo getUserById(@PathVariable("id") Integer id){

@@ -8,17 +8,21 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.daoyun.demo.mapper.CourseMapper;
 import com.daoyun.demo.pojo.Course;
 import com.daoyun.demo.pojo.ReturnInfo;
+import com.daoyun.demo.pojo.User;
 import com.daoyun.demo.pojo.dto.CourseDto;
+import com.daoyun.demo.pojo.dto.CourseMemberInfo;
 import com.daoyun.demo.service.ICourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author MaYan
@@ -36,6 +40,10 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
          * 此处需要写对班课号判断是否唯一的逻辑
          */
         String code = RandomUtil.randomNumbers(7);
+        System.out.println(this.courseMapper.selectList(new QueryWrapper<Course>().eq("course_code", code)));
+        while (!this.courseMapper.selectList(new QueryWrapper<Course>().eq("course_code", code)).isEmpty()) {
+            code = RandomUtil.randomNumbers(7);
+        }
         course.setCourseCode(code);
         course.setCourseName(courseDto.getCourseName());
         course.setTeacher(courseDto.getTeacher());
@@ -54,7 +62,7 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     }
 
     @Override
-    public ReturnInfo updateCourseById(Integer courseId,String courseName,String note) {
+    public ReturnInfo updateCourseById(Integer courseId, String courseName, String note) {
         Course course = new Course();
         course.setCourseId(courseId);
         course.setCourseName(courseName);
@@ -66,18 +74,19 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
 
     /**
      * 考虑是否实现分页查询
+     *
      * @return
      */
     @Override
     public ReturnInfo getCourse() {
         List course = this.courseMapper.selectList(new QueryWrapper<>());
-        return ReturnInfo.success("查询成功",course);
+        return ReturnInfo.success("查询成功", course);
     }
 
     @Override
     public ReturnInfo getUCourse(Integer userId) {
         List course = this.courseMapper.getUCourse(userId);
-        return ReturnInfo.success("查询成功",course);
+        return ReturnInfo.success("查询成功", course);
     }
 
     @Override
@@ -86,10 +95,16 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
             /**
              * 此处需要添加判断班课是否过期的逻辑
              */
-            this.courseMapper.participateInCourse(courseId,userId,LocalDateTime.now());
+            this.courseMapper.participateInCourse(courseId, userId, LocalDateTime.now());
             return ReturnInfo.success("加入成功");
-        }catch (Exception e){
+        } catch (Exception e) {
             return ReturnInfo.error("加入失败");
         }
+    }
+
+    @Override
+    public ReturnInfo getCourseMember(String courerCode) {
+        List<CourseMemberInfo> res = this.courseMapper.getCourseMember(courerCode);
+        return ReturnInfo.success("班课成员信息获取成功", res);
     }
 }

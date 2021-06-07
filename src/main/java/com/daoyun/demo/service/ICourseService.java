@@ -26,4 +26,6 @@ public interface ICourseService extends IService<Course> {
     ReturnInfo getUCourse(Integer userId);
 
     ReturnInfo participateInCourse(Integer courseId, Integer userId);
+
+    ReturnInfo getCourseMember(String courerCode);
 }

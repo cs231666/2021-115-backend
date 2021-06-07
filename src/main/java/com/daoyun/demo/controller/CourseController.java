@@ -79,4 +79,15 @@ public class CourseController {
     public ReturnInfo participateInCourse(@PathVariable("courseId") Integer courseId, @PathVariable("userId") Integer userId) {
         return this.iCourseService.participateInCourse(courseId, userId);
     }
+
+    @ApiOperation("获取班课成员列表")
+    @GetMapping("/course-member/{courerCode}")
+    public ReturnInfo getCourseMember(@PathVariable("courerCode") String courerCode){
+        try {
+            return this.iCourseService.getCourseMember(courerCode);
+        }catch (Exception e){
+            return ReturnInfo.error("获取失败");
+        }
+    }
+
 }

@@ -36,14 +36,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
-        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+//        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
     }
 
     @Override
     public void  configure(WebSecurity web) throws Exception{
         web.ignoring().antMatchers(
+                "/**",
                 "/login",
                 "/loginbycode",
+                "/callback/**",
+                "/github.com/**",
+                "http://localhost:8080/#/dashboard",
                 "/sms/**",
                 "/dictionary/**",
                 "/test/**",
