@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daoyun.demo.mapper.DictionaryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.daoyun.demo.pojo.Dictionary">
+        <id column="dict_id" property="dictId" />
+        <result column="dict_code" property="dictCode" />
+        <result column="dict_name" property="dictName" />
+        <result column="description" property="description" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        dict_id, dict_code, dict_name, description
+    </sql>
+
+    <!--获取所有字典（分页）-->
+    <select id="getDictByPage"  resultType="com.daoyun.demo.pojo.Dictionary">
+        SELECT   * FROM dictionary
+    </select>
+</mapper>

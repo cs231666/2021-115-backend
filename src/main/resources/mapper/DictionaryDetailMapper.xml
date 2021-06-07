@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daoyun.demo.mapper.DictionaryDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.daoyun.demo.pojo.DictionaryDetail">
+        <id column="detail_id" property="detailId" />
+        <result column="dict_code" property="dictCode" />
+        <result column="code" property="code" />
+        <result column="name" property="name" />
+        <result column="fixed" property="fixed" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        detail_id, dict_code, code, name, fixed
+    </sql>
+
+
+<!--    &lt;!&ndash;获取所有字典（分页）&ndash;&gt;-->
+<!--    <select id="getDictDetailByPage"  resultType="com.daoyun.demo.pojo.DictionaryDetail">-->
+<!--        SELECT * FROM dictionary_detail where dict_code = #{dictCode}-->
+<!--    </select>-->
+
+</mapper>
