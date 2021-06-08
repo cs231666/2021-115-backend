@@ -22,10 +22,10 @@ public class SysParamController {
     private ISysParamService iSysParamService;
 
     @ApiOperation("添加系统参数")
-    @PostMapping({"{paramName}/{paramValue}"})
-    public ReturnInfo addSysParam(@PathVariable("paramName") String paramName, @PathVariable("paramValue") String paramValue) {
+    @PostMapping({"{paramKey}/{paramName}/{paramValue}"})
+    public ReturnInfo addSysParam(@PathVariable("paramKey") String paramKey, @PathVariable("paramName") String paramName, @PathVariable("paramValue") String paramValue) {
         try {
-            return this.iSysParamService.addSysParam(paramName, paramValue);
+            return this.iSysParamService.addSysParam(paramKey,paramName, paramValue);
         }catch(Exception e){
             return ReturnInfo.error("添加失败");
         }
@@ -41,9 +41,9 @@ public class SysParamController {
     }
 
     @ApiOperation("实现更新系统参数")
-    @PutMapping({"{paramId}/{paraName}/{paramValue}"})
-    public ReturnInfo updateSysParam(@PathVariable("paramId") int paramId, @PathVariable("paraName") String paramName, @PathVariable("paramValue") String paramValue) {
-        return this.iSysParamService.updateSysParam(paramId, paramName, paramValue);
+    @PutMapping({"{paramId}/{paramKey}/{paramName}/{paramValue}"})
+    public ReturnInfo updateSysParam(@PathVariable("paramId") int paramId, @PathVariable("paramKey") String paramKey,@PathVariable("paramName") String paramName, @PathVariable("paramValue") String paramValue) {
+        return this.iSysParamService.updateSysParam(paramId, paramKey, paramName, paramValue);
     }
 
 
@@ -52,6 +52,16 @@ public class SysParamController {
     public ReturnInfo getSysParam() {
         try {
             return this.iSysParamService.getSysParam();
+        }catch(Exception e){
+            return ReturnInfo.error("查询失败");
+        }
+    }
+
+    @ApiOperation("查关键字的接口，判断是否重复")
+    @GetMapping("/{paramKey}")
+    public ReturnInfo getSysParamKey(@PathVariable("paramKey") String paramKey) {
+        try {
+            return this.iSysParamService.getSysParamKey(paramKey);
         }catch(Exception e){
             return ReturnInfo.error("查询失败");
         }
