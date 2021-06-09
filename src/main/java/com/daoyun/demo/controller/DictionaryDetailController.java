@@ -51,6 +51,26 @@ public class DictionaryDetailController {
         }
     }
 
+//    @ApiOperation("实现获取字典明细")
+//    @GetMapping({"{dictCode}/{page}/{limit}/{style}"})
+//    public ReturnInfo getDictDetail(@PathVariable("dictCode") String dictCode,@PathVariable("page") Integer page, @PathVariable("limit") Integer limit,
+//                                    @PathVariable("style") Integer style) {
+//        try {
+//            return this.iDictionaryDetailService.getDictDetailByPage(dictCode, page, limit, style);
+//        }catch (Exception e){
+//            return ReturnInfo.error("服务器内部错误，无法完成请求");
+//        }
+//    }
+
+    /**
+     * 20210608 21：08
+     * 修改成按照seq排序
+     * @param dictCode
+     * @param page
+     * @param limit
+     * @param style
+     * @return
+     */
     @ApiOperation("实现获取字典明细")
     @GetMapping({"{dictCode}/{page}/{limit}/{style}"})
     public ReturnInfo getDictDetail(@PathVariable("dictCode") String dictCode,@PathVariable("page") Integer page, @PathVariable("limit") Integer limit,
@@ -61,6 +81,27 @@ public class DictionaryDetailController {
             return ReturnInfo.error("服务器内部错误，无法完成请求");
         }
     }
+
+    @ApiOperation("上移字典明细")
+    @PutMapping({"up/{dictId}"})
+    public ReturnInfo moveUp(@PathVariable("dictId") Integer dictDetailId) {
+        try {
+            return this.iDictionaryDetailService.moveUp(dictDetailId);
+        }catch (Exception e){
+            return ReturnInfo.error("服务器内部错误，无法完成请求");
+        }
+    }
+
+    @ApiOperation("下移字典明细")
+    @PutMapping({"down/{dictId}"})
+    public ReturnInfo moveDown(@PathVariable("dictId") Integer dictDetailId) {
+        try {
+            return this.iDictionaryDetailService.moveDown(dictDetailId);
+        }catch (Exception e){
+            return ReturnInfo.error("服务器内部错误，无法完成请求");
+        }
+    }
+
     @ApiOperation("通过字典名获取字典明细")
     @GetMapping({"{dictname}"})
     public ReturnInfo getDictDetailByDictName(@PathVariable("dictname") String dictname) {

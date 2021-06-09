@@ -3,6 +3,7 @@ package com.daoyun.demo.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.daoyun.demo.pojo.ReturnInfo;
 import com.daoyun.demo.pojo.User;
+import com.daoyun.demo.pojo.UserInfo;
 import com.daoyun.demo.pojo.dto.RegisterDto;
 import com.daoyun.demo.pojo.dto.UserPasswordDto;
 
@@ -47,4 +48,6 @@ public interface IUserService extends IService<User> {
     ReturnInfo deleteUser(String username);
 
     ReturnInfo getUserInfoByToken(HttpServletRequest request);
+
+    ReturnInfo resetUserInfoByToken(UserInfo userInfo, HttpServletRequest request);
 }

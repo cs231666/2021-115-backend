@@ -39,5 +39,7 @@ public class DictionaryDetail implements Serializable {
 
     private Integer fixed;
 
+    private Integer seq;
+
 
 }

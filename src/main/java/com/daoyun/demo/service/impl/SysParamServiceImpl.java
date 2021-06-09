@@ -30,8 +30,9 @@ public class SysParamServiceImpl extends ServiceImpl<SysParamMapper, SysParam> i
 
 
     @Override
-    public ReturnInfo addSysParam(String paramName, String paramValue) {
+    public ReturnInfo addSysParam(String paramKey, String paramName, String paramValue) {
         SysParam sysParam = new SysParam();
+        sysParam.setParamKey(paramKey);
         sysParam.setParamName(paramName);
         sysParam.setParamValue(paramValue);
         this.sysParamMapper.insert(sysParam);
@@ -44,14 +45,26 @@ public class SysParamServiceImpl extends ServiceImpl<SysParamMapper, SysParam> i
         return ReturnInfo.success("删除成功");
     }
     @Override
-    public ReturnInfo updateSysParam(int paramId, String paramName, String paramValue) {
+    public ReturnInfo updateSysParam(int paramId, String paramKey, String paramName, String paramValue) {
         SysParam sysParam = new SysParam();
         sysParam.setParamId(paramId);
+        sysParam.setParamKey(paramKey);
         sysParam.setParamName(paramName);
         sysParam.setParamValue(paramValue);
         this.sysParamMapper.updateById(sysParam);
         return ReturnInfo.success("更新成功");
     }
+
+    @Override
+    public ReturnInfo getSysParamKey(String paramKey) {
+        int res = this.sysParamMapper.selectCount(new QueryWrapper<SysParam>().eq("param_key", paramKey));
+        if(res>0){
+            return ReturnInfo.error("关键字重复");
+        }else {
+            return ReturnInfo.success("");
+        }
+    }
+
     @Override
     public ReturnInfo getSysParam() {
         List sysParams = this.sysParamMapper.selectList(new QueryWrapper<>());

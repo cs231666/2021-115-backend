@@ -20,9 +20,7 @@ import java.util.Collection;
 @AllArgsConstructor
 public class UserInfo {
 
-    private String username;
-
-    private Integer sex;
+    private String sex;
 
     private String nickname;
 
@@ -32,8 +30,8 @@ public class UserInfo {
 
     private String email;
 
-    @TableField("org_id")
-    private Integer orgId;
+//    @TableField("org_id")
+//    private Integer orgId;
 
     private LocalDateTime birthday;
 

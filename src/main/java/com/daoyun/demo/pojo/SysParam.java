@@ -31,6 +31,9 @@ public class SysParam implements Serializable {
     @TableId(value = "param_id", type = IdType.AUTO)
     private Integer paramId;
 
+    @TableField("param_key")
+    private String paramKey;
+
     @TableField("param_name")
     private String paramName;
 

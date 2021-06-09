@@ -8,6 +8,7 @@ import com.daoyun.demo.mapper.UserMapper;
 import com.daoyun.demo.pojo.Login;
 import com.daoyun.demo.pojo.ReturnInfo;
 import com.daoyun.demo.pojo.User;
+import com.daoyun.demo.pojo.UserInfo;
 import com.daoyun.demo.pojo.dto.RegisterDto;
 import com.daoyun.demo.pojo.dto.UserPasswordDto;
 import com.daoyun.demo.service.ISmsService;
@@ -224,9 +225,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public ReturnInfo changePassword(UserPasswordDto userPasswordDto) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(userPasswordDto.getUsername());
 
-//        System.out.println("oldpsw:"+ userPasswordDto.getOldpassword());
-//        System.out.println("newpsw:"+ userPasswordDto.getOldpassword());
-//        System.out.println(passwordEncoder.matches(userPasswordDto.getOldpassword(),userDetails.getPassword()));
+
         if (!passwordEncoder.matches(userPasswordDto.getOldpassword(), userDetails.getPassword())) {
 
             return ReturnInfo.badrequest("原密码错误,修改失败");
@@ -259,6 +258,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User user = this.userMapper.getUserInfoByToken(request.getHeader("Authorization"));
         user.setPassword("");
         return ReturnInfo.success("用户信息获取成功",user);
+    }
+
+    @Override
+    public ReturnInfo resetUserInfoByToken(UserInfo userInfo, HttpServletRequest request) {
+        User user = this.userMapper.getUserInfoByToken(request.getHeader("Authorization"));
+        System.out.println("user:" + user);
+
+        if(null != userInfo.getSex()){
+            user.setSex(userInfo.getSex());
+        }
+        if(null != userInfo.getNickname()){
+            user.setNickname(userInfo.getNickname());
+        }
+        if(null != userInfo.getRealname()){
+            user.setRealname(userInfo.getRealname());
+        }
+        if(null != userInfo.getPhone()){
+            user.setPhone(userInfo.getPhone());
+        }
+        if(null != userInfo.getEmail()){
+            user.setEmail(userInfo.getEmail());
+        }
+
+        /**
+         * 学校组织没有加进来
+         */
+        user.setBirthday(userInfo.getBirthday());
+        this.userMapper.updateById(user);
+        return ReturnInfo.success("更新成功",user);
     }
 
     /**

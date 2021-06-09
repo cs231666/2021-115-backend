@@ -3,6 +3,7 @@ package com.daoyun.demo.controller;
 
 import com.daoyun.demo.pojo.ReturnInfo;
 import com.daoyun.demo.pojo.User;
+import com.daoyun.demo.pojo.UserInfo;
 import com.daoyun.demo.pojo.dto.RegisterDto;
 import com.daoyun.demo.pojo.dto.UserPasswordDto;
 import com.daoyun.demo.service.IUserService;
@@ -91,6 +92,17 @@ public class UserController {
            return this.iUserService.getUserInfoByToken(request);
         }catch (Exception e){
             return  ReturnInfo.error("查询失败");
+        }
+    }
+
+    @ApiOperation(value = "更新当前用户信息")
+    @PutMapping("/update-info")
+    public ReturnInfo getUserInfoByToken(@RequestBody UserInfo userInfo, HttpServletRequest request) {
+
+        try {
+            return this.iUserService.resetUserInfoByToken(userInfo,request);
+        }catch (Exception e){
+            return  ReturnInfo.error("更新失败");
         }
     }
 

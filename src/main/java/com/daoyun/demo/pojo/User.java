@@ -42,7 +42,7 @@ public class User implements Serializable, UserDetails {
 
     private String password;
 
-    private Integer sex;
+    private String sex;
 
     private String nickname;
 

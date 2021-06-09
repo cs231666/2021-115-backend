@@ -90,12 +90,12 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     }
 
     @Override
-    public ReturnInfo participateInCourse(Integer courseId, Integer userId) {
+    public ReturnInfo participateInCourse(String courseCode, Integer userId) {
         try {
             /**
              * 此处需要添加判断班课是否过期的逻辑
              */
-            this.courseMapper.participateInCourse(courseId, userId, LocalDateTime.now());
+            this.courseMapper.participateInCourse(courseCode, userId, LocalDateTime.now());
             return ReturnInfo.success("加入成功");
         } catch (Exception e) {
             return ReturnInfo.error("加入失败");
@@ -106,5 +106,11 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     public ReturnInfo getCourseMember(String courerCode) {
         List<CourseMemberInfo> res = this.courseMapper.getCourseMember(courerCode);
         return ReturnInfo.success("班课成员信息获取成功", res);
+    }
+
+    @Override
+    public ReturnInfo getUCourseByCode(Integer userId, String courseCode) {
+        Course course = this.courseMapper.getUCourseByCode(userId,courseCode);
+        return ReturnInfo.success("搜索成功",course);
     }
 }

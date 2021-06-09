@@ -16,9 +16,11 @@ public interface ISysParamService extends IService<SysParam> {
 
     ReturnInfo getSysParam();
 
-    ReturnInfo addSysParam(String paramName, String paramValue);
+    ReturnInfo addSysParam(String paramKey,String paramName, String paramValue);
 
     ReturnInfo deleteSysParam(Integer paramId);
 
-    ReturnInfo updateSysParam(int paramId, String paramName, String paramValue);
+    ReturnInfo updateSysParam(int paramId, String paramKey,String paramName, String paramValue);
+
+    ReturnInfo getSysParamKey(String paramKey);
 }

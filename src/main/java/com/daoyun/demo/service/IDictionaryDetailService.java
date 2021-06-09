@@ -25,4 +25,8 @@ public interface IDictionaryDetailService extends IService<DictionaryDetail> {
     ReturnInfo deleteDictDetail(Integer detailId);
 
     ReturnInfo updateDictDetail(Integer detailId, String name);
+
+    ReturnInfo moveUp(Integer dictId);
+
+    ReturnInfo moveDown(Integer dictId);
 }

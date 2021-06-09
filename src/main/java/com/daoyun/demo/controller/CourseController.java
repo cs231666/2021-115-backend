@@ -64,6 +64,8 @@ public class CourseController {
         }
     }
 
+
+
     @ApiOperation("获取该用户班课")
     @GetMapping("{userId}")
     public ReturnInfo getUCourse(@PathVariable("userId") Integer userId){
@@ -74,10 +76,20 @@ public class CourseController {
         }
     }
 
+    @ApiOperation("搜索该用户某一班课")
+    @GetMapping("{userId}/{courseCode}")
+    public ReturnInfo getUCourseByCode(@PathVariable("userId") Integer userId,@PathVariable("courseCode") String courseCode){
+        try {
+            return this.iCourseService.getUCourseByCode(userId,courseCode);
+        }catch (Exception e){
+            return ReturnInfo.error("获取失败");
+        }
+    }
+
     @ApiOperation("加入班课")
-    @PostMapping({"{courseId}/{userId}"})
-    public ReturnInfo participateInCourse(@PathVariable("courseId") Integer courseId, @PathVariable("userId") Integer userId) {
-        return this.iCourseService.participateInCourse(courseId, userId);
+    @PostMapping({"{courseCode}/{userId}"})
+    public ReturnInfo participateInCourse(@PathVariable("courseCode") String courseCode, @PathVariable("userId") Integer userId) {
+        return this.iCourseService.participateInCourse(courseCode, userId);
     }
 
     @ApiOperation("获取班课成员列表")
@@ -89,5 +101,7 @@ public class CourseController {
             return ReturnInfo.error("获取失败");
         }
     }
+
+
 
 }
