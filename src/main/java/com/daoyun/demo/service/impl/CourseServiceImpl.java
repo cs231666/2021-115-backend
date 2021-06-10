@@ -1,6 +1,7 @@
 package com.daoyun.demo.service.impl;
 
 
+import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.R;
@@ -12,9 +13,11 @@ import com.daoyun.demo.pojo.User;
 import com.daoyun.demo.pojo.dto.CourseDto;
 import com.daoyun.demo.pojo.dto.CourseMemberInfo;
 import com.daoyun.demo.service.ICourseService;
+import com.daoyun.demo.util.QRCodeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -37,16 +40,29 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     public ReturnInfo createCourse(CourseDto courseDto) {
         Course course = new Course();
         /**
-         * 此处需要写对班课号判断是否唯一的逻辑
+         * 生成班课号
          */
         String code = RandomUtil.randomNumbers(7);
         System.out.println(this.courseMapper.selectList(new QueryWrapper<Course>().eq("course_code", code)));
+        /**
+         * 对班课号判断是否唯一
+         */
         while (!this.courseMapper.selectList(new QueryWrapper<Course>().eq("course_code", code)).isEmpty()) {
             code = RandomUtil.randomNumbers(7);
         }
+        /**
+         * 根据班课号生成二维码
+         */
+        String qrCode = QRCodeUtil.getBase64QRCode(code);
+
+
+        /**
+         * 存到数据库
+         */
         course.setCourseCode(code);
         course.setCourseName(courseDto.getCourseName());
         course.setTeacher(courseDto.getTeacher());
+        course.setQrCode(qrCode);
         course.setNote(courseDto.getNote());
         course.setTerm(courseDto.getTerm());
         course.setCreationDate(LocalDateTime.now());
@@ -91,15 +107,35 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
 
     @Override
     public ReturnInfo participateInCourse(String courseCode, Integer userId) {
-        try {
-            /**
-             * 此处需要添加判断班课是否过期的逻辑
-             */
-            this.courseMapper.participateInCourse(courseCode, userId, LocalDateTime.now());
-            return ReturnInfo.success("加入成功");
-        } catch (Exception e) {
-            return ReturnInfo.error("加入失败");
+        /**
+         * 此处需要添加判断班课是否过期的逻辑
+         */
+
+        /**
+         * 判断用户是否已加入该班课
+         */
+        int res = this.courseMapper.verifyIn(courseCode, userId);
+        if (res > 0) {
+            return ReturnInfo.error("已加入该班课");
         }
+        this.courseMapper.participateInCourse(courseCode, userId, LocalDateTime.now());
+        return ReturnInfo.success("加入成功");
+
+    }
+
+    @Override
+    public ReturnInfo getCourseByQrCode(String qrCode) {
+        /**
+         * 此处需要添加判断班课是否过期的逻辑
+         */
+
+
+        /**
+         * 判断用户是否已加入该班课
+         */
+        Course course = this.courseMapper.selectOne(new QueryWrapper<Course>().eq("qr_code", qrCode));
+        return ReturnInfo.success("班课获取成功",course);
+
     }
 
     @Override
@@ -110,7 +146,13 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
 
     @Override
     public ReturnInfo getUCourseByCode(Integer userId, String courseCode) {
-        Course course = this.courseMapper.getUCourseByCode(userId,courseCode);
-        return ReturnInfo.success("搜索成功",course);
+        Course course = this.courseMapper.getUCourseByCode(userId, courseCode);
+        return ReturnInfo.success("搜索成功", course);
+    }
+
+    @Override
+    public ReturnInfo getCourseByCode(String courseCode) {
+        Course course = this.courseMapper.selectOne(new QueryWrapper<Course>().eq("course_code", courseCode));
+        return ReturnInfo.success("班课获取成功",course);
     }
 }

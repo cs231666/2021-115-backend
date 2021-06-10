@@ -40,9 +40,12 @@ public interface CourseMapper extends BaseMapper<Course> {
     @Insert("insert into participate_in_course(course_code,user_id,creation_date,creator) values(#{courseCode}, #{userId}, #{creationDate},#{userId})")
     void participateInCourse(String courseCode, Integer userId,LocalDateTime creationDate);
 
-    @Select("SELECT u.realname, u.student_id, pic.score FROM user u, participate_in_course pic WHERE pic.course_code = #{courseCode} AND u.id = pic.user_id")
+    @Select("SELECT u.realname, u.student_id, pic.score FROM user u, participate_in_course pic WHERE pic.course_code = #{courseCode} AND u.id = pic.user_id ORDER BY pic.score DESC")
     List<CourseMemberInfo> getCourseMember(String courseCode);
 
     @Select("SELECT c.* FROM course c,participate_in_course pic WHERE c.course_code = pic.course_code and pic.user_id = #{userId} and pic.course_code = #{courseCode}")
     Course getUCourseByCode(Integer userId, String courseCode);
+
+    @Select("SELECT count(*) FROM participate_in_course WHERE course_code = #{courseCode} AND user_id = #{userId}")
+    int verifyIn(String courseCode, Integer userId);
 }

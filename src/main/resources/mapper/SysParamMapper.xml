@@ -5,13 +5,14 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.daoyun.demo.pojo.SysParam">
         <id column="param_id" property="paramId" />
+        <result column="param_key" property="paramKey" />
         <result column="param_name" property="paramName" />
         <result column="param_value" property="paramValue" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        param_id, param_name, param_value
+        param_id, param_key, param_name, param_value
     </sql>
 
 </mapper>
