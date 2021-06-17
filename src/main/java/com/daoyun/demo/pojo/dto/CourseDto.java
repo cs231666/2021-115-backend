@@ -20,16 +20,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CourseDto {
 
-//    @TableField("course_code")
-//    private String courseCode;//课程号
 
     @TableField("course_name")
     private String courseName;//课程名
 
+    private String org;//学校组织名称
+
     private String teacher;
 
-    private String note;//备注
+    private String className;//备注
 
     private String term;//学期
+
+    private Integer creator;
 
 }

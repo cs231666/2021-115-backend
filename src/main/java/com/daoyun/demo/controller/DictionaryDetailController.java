@@ -51,16 +51,6 @@ public class DictionaryDetailController {
         }
     }
 
-//    @ApiOperation("实现获取字典明细")
-//    @GetMapping({"{dictCode}/{page}/{limit}/{style}"})
-//    public ReturnInfo getDictDetail(@PathVariable("dictCode") String dictCode,@PathVariable("page") Integer page, @PathVariable("limit") Integer limit,
-//                                    @PathVariable("style") Integer style) {
-//        try {
-//            return this.iDictionaryDetailService.getDictDetailByPage(dictCode, page, limit, style);
-//        }catch (Exception e){
-//            return ReturnInfo.error("服务器内部错误，无法完成请求");
-//        }
-//    }
 
     /**
      * 20210608 21：08
@@ -102,7 +92,7 @@ public class DictionaryDetailController {
         }
     }
 
-    @ApiOperation("通过字典名获取字典明细")
+    @ApiOperation("通过字典名获取字典明细(前端)")
     @GetMapping({"{dictname}"})
     public ReturnInfo getDictDetailByDictName(@PathVariable("dictname") String dictname) {
         try {

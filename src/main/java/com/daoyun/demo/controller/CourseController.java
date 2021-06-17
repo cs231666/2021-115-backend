@@ -4,6 +4,7 @@ package com.daoyun.demo.controller;
 import com.daoyun.demo.pojo.ReturnInfo;
 import com.daoyun.demo.pojo.dto.CourseDto;
 
+import com.daoyun.demo.pojo.dto.CourseInfo;
 import com.daoyun.demo.pojo.dto.ParticipateInCourseDto;
 import com.daoyun.demo.service.ICourseService;
 import io.swagger.annotations.ApiOperation;
@@ -35,6 +36,7 @@ public class CourseController {
         }
     }
 
+
     @ApiOperation("删除班课")
     @DeleteMapping("/{courseId}")
     public ReturnInfo deleteCourseById(@PathVariable("courseId") Integer courseId) {
@@ -45,12 +47,11 @@ public class CourseController {
         }
     }
 
-    @ApiOperation("更新班课")
-    @PutMapping("/{courseId}/{courseName}/{note}")
-    public ReturnInfo updateCourse(@PathVariable("courseId") Integer courseId, @PathVariable("courseName") String courseName,
-                                   @PathVariable("note") String note) {
+    @ApiOperation("更新班课状态信息")
+    @PutMapping("/")
+    public ReturnInfo updateCourse(@RequestBody CourseInfo courseInfo) {
         try {
-            return this.iCourseService.updateCourseById(courseId, courseName, note);
+            return this.iCourseService.updateCourseById(courseInfo);
         } catch (Exception e) {
             return ReturnInfo.error("更新失败");
         }
@@ -68,7 +69,7 @@ public class CourseController {
     }
 
 
-    @ApiOperation("获取该用户班课")
+    @ApiOperation("获取该用户加入班课")
     @GetMapping("{userId}")
     public ReturnInfo getUCourse(@PathVariable("userId") Integer userId) {
         try {
@@ -77,6 +78,18 @@ public class CourseController {
             return ReturnInfo.error("获取失败");
         }
     }
+
+    @ApiOperation("获取该用户创建班课")
+    @GetMapping("createby/{userId}")
+    public ReturnInfo getUCreateCourse(@PathVariable("userId") Integer userId) {
+        try {
+            return this.iCourseService.getUCreateCourse(userId);
+        } catch (Exception e) {
+            return ReturnInfo.error("获取失败");
+        }
+    }
+
+
 
     @ApiOperation("搜索该用户某一班课")
     @GetMapping("{userId}/{courseCode}")
@@ -99,15 +112,7 @@ public class CourseController {
     }
 
 
-    @ApiOperation("通过二维码获取班课信息")
-    @PostMapping("/getByQrCode")
-    public ReturnInfo getCourseByQrCode(@RequestBody ParticipateInCourseDto picDto) {
-        try {
-            return this.iCourseService.getCourseByQrCode(picDto.getQrCode());
-        } catch (Exception e) {
-            return ReturnInfo.error("获取失败");
-        }
-    }
+
 
     @ApiOperation("通过班课号获取班课信息")
     @PostMapping("/getByCourseCode/{courseCode}")
@@ -118,15 +123,6 @@ public class CourseController {
             return ReturnInfo.error("获取失败");
         }
     }
-//    @ApiOperation("通过二维码加入班课")
-//    @PostMapping("/picByQrCode")
-//    public ReturnInfo participateInCourseByQrCode(@RequestBody ParticipateInCourseDto picDto) {
-//        try {
-//            return this.iCourseService.participateInCourseByQrCode(picDto.getQrCode(), picDto.getUserId());
-//        } catch (Exception e) {
-//            return ReturnInfo.error("加入失败");
-//        }
-//    }
 
     @ApiOperation("获取班课成员列表")
     @GetMapping("/course-member/{courerCode}")

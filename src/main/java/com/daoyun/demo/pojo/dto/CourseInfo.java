@@ -1,19 +1,23 @@
 package com.daoyun.demo.pojo.dto;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @description: 用来通过二维码和用户id加入班课
+ * @description: 描述班课状态信息
  * @author: MaYan
  */
+
 @Data
 @Configuration
 @AllArgsConstructor
 @NoArgsConstructor
-public class ParticipateInCourseDto {
-    String courseCode;
-    Integer userId;
+public class CourseInfo {
+    private Integer courseId;
+    private Integer status;
+    private Integer isEnd;
 }

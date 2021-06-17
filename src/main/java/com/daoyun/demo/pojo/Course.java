@@ -36,24 +36,28 @@ public class Course implements Serializable {
     @TableField("course_name")
     private String courseName;//课程名
 
+    private String org;//学校组织
+
+    private Integer status;//是否允许加入，0允许，1不允许
+
+    @TableField("is_end")
+    private Integer isEnd;//是否允许结束，0未结束，1结束
+
+
     private String teacher;
 
-    @TableField("qr_code")
-    private String qrCode;//二维码
-
-    private String note;//备注
+    @TableField("class_name")
+    private String className;//班级
 
     private String term;//学期
 
     @TableField("creation_date")
     private LocalDateTime creationDate;//创建时间
 
-    private String creator;
+    private Integer creator;
 
     @TableField("modification_date")
     private LocalDateTime modificationDate;//修改时间
 
     private String modifier;
-
-
 }

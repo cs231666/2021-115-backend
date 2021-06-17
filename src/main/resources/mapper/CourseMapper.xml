@@ -7,9 +7,11 @@
         <id column="course_id" property="courseId" />
         <result column="course_code" property="courseCode" />
         <result column="course_name" property="courseName" />
+        <result column="org" property="org" />
+        <result column="status" property="status" />
+        <result column="is_end" property="isEnd" />
         <result column="teacher" property="teacher" />
-        <result column="qr_code" property="qrCode" />
-        <result column="note" property="note" />
+        <result column="class_name" property="className" />
         <result column="term" property="term" />
         <result column="creation_date" property="creationDate" />
         <result column="creator" property="creator" />
@@ -19,7 +21,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        course_id, course_code, course_name, teacher, qr_code, note, term, creation_date, creator, modification_date, modifier
+        course_id, course_code, course_name, org, status, is_end, teacher, class_name, term, creation_date, creator, modification_date, modifier
     </sql>
 
 </mapper>

@@ -34,4 +34,8 @@ public interface DictionaryDetailMapper extends BaseMapper<DictionaryDetail> {
 
     @Select("SELECT MAX(seq) from dictionary_detail where dict_code = #{dictCode}")
     Integer selectMax(String dictCode);
+
+
+//    @Select("SELECT name from dictionary_detail where dict_code = #{dictCode}")
+//    List getSchool(String dictCode);
 }

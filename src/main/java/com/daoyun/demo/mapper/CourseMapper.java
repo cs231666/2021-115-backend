@@ -48,4 +48,7 @@ public interface CourseMapper extends BaseMapper<Course> {
 
     @Select("SELECT count(*) FROM participate_in_course WHERE course_code = #{courseCode} AND user_id = #{userId}")
     int verifyIn(String courseCode, Integer userId);
+
+    @Select("SELECT COUNT(*) FROM course WHERE course_code = #{courseCode}")
+    int verifyCourseCode(String courseCode);
 }

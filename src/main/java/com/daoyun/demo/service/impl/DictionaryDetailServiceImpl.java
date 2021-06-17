@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -52,7 +53,7 @@ public class DictionaryDetailServiceImpl extends ServiceImpl<DictionaryDetailMap
         dictionaryDetail.setDictCode(dictCode);
         dictionaryDetail.setCode(code);
         dictionaryDetail.setName(name);
-        dictionaryDetail.setSeq(maxSeq+1);
+        dictionaryDetail.setSeq(maxSeq + 1);
         this.dictionaryDetailMapper.insert(dictionaryDetail);
         return ReturnInfo.success("添加成功");
     }
@@ -90,13 +91,13 @@ public class DictionaryDetailServiceImpl extends ServiceImpl<DictionaryDetailMap
         /**
          * 获取当前行的Seq
          */
-        DictionaryDetail dDetail1= this.dictionaryDetailMapper.selectById(dictId);
+        DictionaryDetail dDetail1 = this.dictionaryDetailMapper.selectById(dictId);
         Integer currentSeq = dDetail1.getSeq();
 
         /**
          * 获取该大类下 上一行的id,Seq
          */
-        DictionaryDetail dDetail2 =  this.dictionaryDetailMapper.previous(dDetail1.getDictCode(),currentSeq);
+        DictionaryDetail dDetail2 = this.dictionaryDetailMapper.previous(dDetail1.getDictCode(), currentSeq);
         Integer beforeId = dDetail2.getDetailId();
         Integer beforeSeq = dDetail2.getSeq();
 
@@ -118,16 +119,15 @@ public class DictionaryDetailServiceImpl extends ServiceImpl<DictionaryDetailMap
         /**
          * 获取当前行的Seq
          */
-        DictionaryDetail dDetail1= this.dictionaryDetailMapper.selectById(dictId);
+        DictionaryDetail dDetail1 = this.dictionaryDetailMapper.selectById(dictId);
         Integer currentSeq = dDetail1.getSeq();
 
         /**
          * 获取该大类下 上一行的id,Seq
          */
-        DictionaryDetail dDetail2 =  this.dictionaryDetailMapper.after(dDetail1.getDictCode(),currentSeq);
+        DictionaryDetail dDetail2 = this.dictionaryDetailMapper.after(dDetail1.getDictCode(), currentSeq);
         Integer afterId = dDetail2.getDetailId();
         Integer afterSeq = dDetail2.getSeq();
-
 
 
         /**
@@ -179,8 +179,32 @@ public class DictionaryDetailServiceImpl extends ServiceImpl<DictionaryDetailMap
 
     @Override
     public ReturnInfo getDictDetailByDictName(String dictname) {
-//        List<DictionaryDetail>dictionaryDetails = this.dictionaryDetailMapper.selectList(new QueryWrapper<DictionaryDetail>().eq("name",name));
         List<DictionaryDetail> dictionaryDetails = this.dictionaryDetailMapper.getDictDetailByDictName(dictname);
-        return ReturnInfo.success("查询成功",dictionaryDetails);
+        return ReturnInfo.success("查询成功", dictionaryDetails);
+    }
+
+    @Override
+    public ReturnInfo getSchool() {
+        QueryWrapper<DictionaryDetail> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("detail_id", "name").eq("dict_code", "School");
+        List res = this.dictionaryDetailMapper.selectList(queryWrapper);
+        return ReturnInfo.success("查询成功", res);
+    }
+
+    @Override
+    public ReturnInfo getCollege(Integer parentId) {
+        QueryWrapper<DictionaryDetail> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("detail_id", "name").eq("parent", parentId);
+        List res = this.dictionaryDetailMapper.selectList(queryWrapper);
+        return ReturnInfo.success("查询成功", res);
+    }
+
+    @Override
+    public ReturnInfo getTerm() {
+        QueryWrapper<DictionaryDetail> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("name").eq("dict_code", "Term");
+        List res = this.dictionaryDetailMapper.selectList(queryWrapper);
+        System.out.println(res.get(0));
+        return ReturnInfo.success("查询成功", res);
     }
 }

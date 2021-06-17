@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.daoyun.demo.pojo.Course;
 import com.daoyun.demo.pojo.ReturnInfo;
 import com.daoyun.demo.pojo.dto.CourseDto;
+import com.daoyun.demo.pojo.dto.CourseInfo;
 
 /**
  * <p>
@@ -19,7 +20,7 @@ public interface ICourseService extends IService<Course> {
 
     ReturnInfo deleteCourseById(Integer courseId);
 
-    ReturnInfo updateCourseById(Integer courseId,String courseName,String note);
+    ReturnInfo updateCourseById(CourseInfo courseInfo);
 
     ReturnInfo getCourse();
 
@@ -27,11 +28,11 @@ public interface ICourseService extends IService<Course> {
 
     ReturnInfo participateInCourse(String courseCode, Integer userId);
 
-    ReturnInfo getCourseByQrCode(String qrCode);
-
     ReturnInfo getCourseMember(String courerCode);
 
     ReturnInfo getUCourseByCode(Integer userId, String courseCode);
 
     ReturnInfo getCourseByCode(String courseCode);
+
+    ReturnInfo getUCreateCourse(Integer userId);
 }

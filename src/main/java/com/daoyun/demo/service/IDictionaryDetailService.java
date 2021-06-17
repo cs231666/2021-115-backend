@@ -29,4 +29,10 @@ public interface IDictionaryDetailService extends IService<DictionaryDetail> {
     ReturnInfo moveUp(Integer dictId);
 
     ReturnInfo moveDown(Integer dictId);
+
+    ReturnInfo getSchool();
+
+    ReturnInfo getCollege(Integer parentId);
+
+    ReturnInfo getTerm();
 }
