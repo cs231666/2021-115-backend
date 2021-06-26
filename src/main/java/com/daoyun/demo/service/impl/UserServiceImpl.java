@@ -1,18 +1,20 @@
 package com.daoyun.demo.service.impl;
 
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.daoyun.demo.config.security.JwtTokenUtil;
+import com.daoyun.demo.mapper.CourseMapper;
+import com.daoyun.demo.mapper.ParticipateInCourseMapper;
 import com.daoyun.demo.mapper.UserMapper;
-import com.daoyun.demo.pojo.Login;
-import com.daoyun.demo.pojo.ReturnInfo;
-import com.daoyun.demo.pojo.User;
-import com.daoyun.demo.pojo.UserInfo;
+import com.daoyun.demo.pojo.*;
 import com.daoyun.demo.pojo.dto.RegisterDto;
+import com.daoyun.demo.pojo.dto.UserInfoDTO;
 import com.daoyun.demo.pojo.dto.UserPasswordDto;
 import com.daoyun.demo.service.ISmsService;
 import com.daoyun.demo.service.IUserService;
+import com.daoyun.demo.util.LoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -49,11 +51,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
+    @Autowired(required = false)
     private UserMapper userMapper;
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
+
+    @Autowired(required = false)
+    private CourseMapper courseMapper;
+
+    @Autowired(required = false)
+    private ParticipateInCourseMapper participateInCourseMapper;
 
     /**
      * 登录之后返回token
@@ -156,12 +164,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         } else {
             if (res == 1) {
                 return ReturnInfo.badrequest("验证码错误");
-
             } else if (res == 2) {
                 return ReturnInfo.badrequest("验证码失效");
             } else {
                 User user = new User();
                 user.setUsername(username);
+                if (LoginUtil.check(username).equals("phone")){
+                    user.setPhone(username);
+                }
                 user.setRole(role);
                 String pwd = passwordEncoder.encode("123456");
                 user.setPassword(pwd);
@@ -176,17 +186,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public ReturnInfo userRegisterByPsw(RegisterDto registerDto, HttpServletRequest request) {
         User isuser = this.userMapper.selectOne(new QueryWrapper<User>().eq("username", registerDto.getUsername()));
-        int res = iSmsService.verifyCode(registerDto.getUsername(), registerDto.getCode());
+//        int res = iSmsService.verifyCode(registerDto.getUsername(), registerDto.getCode());
         if (isuser != null) {
             return ReturnInfo.created("用户已存在");
         } else {
-            if (res == 1) {
-                return ReturnInfo.badrequest("验证码错误");
-            } else if (res == 2) {
-                return ReturnInfo.badrequest("验证码失效");
-            } else {
+//            if (res == 1) {
+//                return ReturnInfo.badrequest("验证码错误");
+//            } else if (res == 2) {
+//                return ReturnInfo.badrequest("验证码失效");
+//            } else {
                 User user = new User();
                 user.setUsername(registerDto.getUsername());
+                if (LoginUtil.check(registerDto.getUsername()).equals("phone")){
+                    user.setPhone(registerDto.getUsername());
+                }
                 user.setRole(registerDto.getRole());
                 String pwd = passwordEncoder.encode(registerDto.getPassword());
                 user.setPassword(pwd);
@@ -194,7 +207,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 user.setCreator(registerDto.getUsername());
                 this.userMapper.insert(user);
                 return ReturnInfo.success("注册成功");
-            }
+//            }
         }
     }
 
@@ -242,6 +255,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
+    public ReturnInfo forgotPassword(String username, String code) {
+        int res = iSmsService.verifyCode(username, code);
+        if (res == 1) {
+            return ReturnInfo.badrequest("验证码错误");
+        } else if (res == 2) {
+            return ReturnInfo.badrequest("验证码失效");
+        }
+        User user = userMapper.selectOne(new QueryWrapper<User>().eq("username", username));
+        user.setPassword(passwordEncoder.encode("123456"));
+        int ret = userMapper.updateById(user);
+        if (ret != 0){
+            return ReturnInfo.success("密码重置为：123456, 请重新登录");
+        }
+        return ReturnInfo.error("密码重置失败，请重试");
+
+    }
+
+    @Override
     public ReturnInfo getUserById(Integer id) {
         User user = this.userMapper.selectById(id);
         return ReturnInfo.success("获取成功", user);
@@ -257,7 +288,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public ReturnInfo getUserInfoByToken(HttpServletRequest request) {
         User user = this.userMapper.getUserInfoByToken(request.getHeader("Authorization"));
         user.setPassword("");
-        return ReturnInfo.success("用户信息获取成功",user);
+        UserInfoDTO userInfoDTO = new UserInfoDTO();
+        BeanUtil.copyProperties(user, userInfoDTO);
+        List<Course> courses = courseMapper.selectList(new QueryWrapper<Course>().eq("creator",user.getId()));
+        List<ParticipateInCourse> participateInCourses =
+                participateInCourseMapper.selectList(
+                        new QueryWrapper<ParticipateInCourse>().eq("user_id", user.getId()));
+        userInfoDTO.setCreate(courses.size());
+        userInfoDTO.setJoin(participateInCourses.size());
+        return ReturnInfo.success("用户信息获取成功", userInfoDTO);
     }
 
     @Override
@@ -268,26 +307,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if(null != userInfo.getSex()){
             user.setSex(userInfo.getSex());
         }
-        if(null != userInfo.getNickname()){
-            user.setNickname(userInfo.getNickname());
+        if(null != userInfo.getStudentId()){
+            user.setStudentId(userInfo.getStudentId());
         }
         if(null != userInfo.getRealname()){
             user.setRealname(userInfo.getRealname());
         }
-        if(null != userInfo.getPhone()){
-            user.setPhone(userInfo.getPhone());
-        }
-        if(null != userInfo.getEmail()){
-            user.setEmail(userInfo.getEmail());
+//        if(null != userInfo.getPhone()){
+//            user.setPhone(userInfo.getPhone());
+//        }
+        user.setRole(userInfo.getRole());
+
+        if(null != userInfo.getOrg()){
+            user.setOrg(userInfo.getOrg());
         }
 
-        /**
-         * 学校组织没有加进来
-         */
         user.setBirthday(userInfo.getBirthday());
         this.userMapper.updateById(user);
         return ReturnInfo.success("更新成功",user);
     }
+
+
 
     /**
      * 根据用户名获取用户

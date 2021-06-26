@@ -25,6 +25,13 @@ import lombok.experimental.Accessors;
 @ApiModel(value="Course对象", description="")
 public class Course implements Serializable {
 
+    /**
+     * status = 0 不允许加入
+     * status = 1 允许加入
+     * isEnd = 1  结束班课
+     * isEnd=0  不结束班课
+     */
+
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "course_id", type = IdType.AUTO)

@@ -29,7 +29,7 @@ import java.util.Map;
 @Service
 public class DictionaryDetailServiceImpl extends ServiceImpl<DictionaryDetailMapper, DictionaryDetail> implements IDictionaryDetailService {
 
-    @Autowired
+    @Autowired(required = false)
     private DictionaryDetailMapper dictionaryDetailMapper;
 
 
@@ -43,17 +43,15 @@ public class DictionaryDetailServiceImpl extends ServiceImpl<DictionaryDetailMap
      */
     @Override
     public ReturnInfo addDictDetail(String dictCode, String code, String name) {
-
         if (this.dictionaryDetailMapper.selectOne(new QueryWrapper<DictionaryDetail>().eq("dict_code", dictCode).eq("name", name)) != null) {
             return ReturnInfo.created("该字典下此名称已经存在，请修改以后再提交！");
         }
         Integer maxSeq = this.dictionaryDetailMapper.selectMax(dictCode);
-
         DictionaryDetail dictionaryDetail = new DictionaryDetail();
         dictionaryDetail.setDictCode(dictCode);
         dictionaryDetail.setCode(code);
         dictionaryDetail.setName(name);
-        dictionaryDetail.setSeq(maxSeq + 1);
+        dictionaryDetail.setSeq(maxSeq == null ? 0 : maxSeq + 1);
         this.dictionaryDetailMapper.insert(dictionaryDetail);
         return ReturnInfo.success("添加成功");
     }

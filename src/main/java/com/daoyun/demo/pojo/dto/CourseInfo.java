@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseInfo {
-    private Integer courseId;
+    private String courseCode;
     private Integer status;
     private Integer isEnd;
 }

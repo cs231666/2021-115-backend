@@ -22,17 +22,20 @@ public class UserInfo {
 
     private String sex;
 
-    private String nickname;
+    private String StudentId;
+
+    private int role;
 
     private String realname;
 
-    private String phone;
+//    private String phone;
 
-    private String email;
+    private String org;
+
 
 //    @TableField("org_id")
 //    private Integer orgId;
 
-    private LocalDateTime birthday;
+    private String birthday;
 
 }

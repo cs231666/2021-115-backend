@@ -50,6 +50,17 @@ public class UserController {
         }
     }
 
+    @ApiOperation("忘记密码")
+    @PutMapping("forgotPassword")
+    public ReturnInfo forgotPassword(@RequestParam String username, @RequestParam String code){
+        try {
+            return iUserService.forgotPassword(username, code);
+        } catch (Exception e){
+            return ReturnInfo.error("服务器内部错误，无法完成请求");
+        }
+    }
+
+
     @ApiOperation(value = "获取所有用户信息")
     @GetMapping("/allinfo")
     public ReturnInfo getAllUserInfo() {
@@ -100,7 +111,7 @@ public class UserController {
     public ReturnInfo getUserInfoByToken(@RequestBody UserInfo userInfo, HttpServletRequest request) {
 
         try {
-            return this.iUserService.resetUserInfoByToken(userInfo,request);
+            return this.iUserService.resetUserInfoByToken(userInfo, request);
         }catch (Exception e){
             return  ReturnInfo.error("更新失败");
         }

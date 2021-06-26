@@ -90,6 +90,16 @@ public class CourseController {
     }
 
 
+    @ApiOperation("获取用户再当前课程的排名和经验值")
+    @GetMapping("/getRankAndScore/{userId}/{courseCode}")
+    public ReturnInfo getRankAndScore(@PathVariable("userId") Integer userId, @PathVariable("courseCode") String courseCode){
+        try {
+            return iCourseService.getRankAndScore(userId, courseCode);
+        } catch (Exception e){
+            return ReturnInfo.error("获取失败");
+        }
+    }
+
 
     @ApiOperation("搜索该用户某一班课")
     @GetMapping("{userId}/{courseCode}")
@@ -134,5 +144,24 @@ public class CourseController {
         }
     }
 
+    @ApiOperation("设定班课是否可以加入(0:yes 1:no)")
+    @PostMapping("/setJoinStatus")
+    public ReturnInfo setJoinStatus(@RequestParam String course_code, @RequestParam Integer status){
+        try {
+            return iCourseService.setJoinStatus(course_code, status);
+        } catch (Exception e){
+            return ReturnInfo.error("更新失败");
+        }
+    }
 
+    @ApiOperation("班课是否结束")
+    @GetMapping("/isEnd(0:no 1:yes)")
+    public ReturnInfo isEnd(@RequestParam String course_code){
+        try {
+            return iCourseService.isEnd(course_code);
+        } catch (Exception e){
+            return ReturnInfo.error("查询失败");
+        }
+
+    }
 }

@@ -14,7 +14,7 @@
         <result column="student_id" property="studentId" />
         <result column="phone" property="phone" />
         <result column="email" property="email" />
-        <result column="org_id" property="orgId" />
+        <result column="org" property="org" />
         <result column="birthday" property="birthday" />
         <result column="login_time" property="loginTime" />
         <result column="token" property="token" />
@@ -26,7 +26,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, role, username, password, sex, nickname, realname, student_id,phone, email, org_id, birthday, login_time, token, creation_date, creator, modification_date, modifier
+        id, role, username, password, sex, nickname, realname, student_id, phone, email, org, birthday, login_time, token, creation_date, creator, modification_date, modifier
     </sql>
 
 </mapper>

@@ -28,6 +28,7 @@ public class DictionaryDetailController {
         try {
             return this.iDictionaryDetailService.addDictDetail(dictCode, code, name);
         }catch (Exception e){
+            e.printStackTrace();
             return ReturnInfo.error("服务器内部错误，无法完成请求");
         }
     }

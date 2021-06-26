@@ -40,7 +40,7 @@ public class DictionaryDetail implements Serializable {
 
     private String name;
 
-    private Integer fixed;
+//    private Integer fixed;
 
     private Integer seq;
 

@@ -24,7 +24,7 @@ public class AuthorizeController {
     @Autowired
     private GitHubProvider gitHubProvider;
 
-    @Autowired
+    @Autowired(required = false)
     private UserMapper userMapper;
 
     @Autowired

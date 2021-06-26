@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 public class SysParamServiceImpl extends ServiceImpl<SysParamMapper, SysParam> implements ISysParamService {
 
-    @Autowired
+    @Autowired(required = false)
     SysParamMapper sysParamMapper;
 
 
@@ -63,6 +63,12 @@ public class SysParamServiceImpl extends ServiceImpl<SysParamMapper, SysParam> i
         }else {
             return ReturnInfo.success("");
         }
+    }
+
+    @Override
+    public ReturnInfo getParam(String param_key) {
+        SysParam sysParam = sysParamMapper.selectOne(new QueryWrapper<SysParam>().eq("param_key", param_key));
+        return ReturnInfo.success("获取成功", sysParam);
     }
 
     @Override

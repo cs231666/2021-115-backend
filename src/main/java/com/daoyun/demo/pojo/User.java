@@ -18,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author MaYan
@@ -49,16 +49,15 @@ public class User implements Serializable, UserDetails {
     private String realname;
 
     @TableField("student_id")
-    private Integer studentId;
+    private String studentId;
 
     private String phone;
 
     private String email;
 
-    @TableField("org_id")
-    private Integer orgId;
+    private String org;
 
-    private LocalDateTime birthday;
+    private String birthday;
 
     @TableField("login_time")
     private LocalDateTime loginTime;

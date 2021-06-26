@@ -35,4 +35,11 @@ public interface ICourseService extends IService<Course> {
     ReturnInfo getCourseByCode(String courseCode);
 
     ReturnInfo getUCreateCourse(Integer userId);
+
+    ReturnInfo getRankAndScore(Integer userId, String courseCode);
+
+    ReturnInfo setJoinStatus(String course_code, Integer status);
+
+    ReturnInfo isEnd(String course_code);
+
 }

@@ -67,4 +67,14 @@ public class SysParamController {
         }
     }
 
+    @ApiOperation("获取某个系统参数")
+    @GetMapping("/getParam")
+    public ReturnInfo getParam(@RequestParam String param_key){
+        try {
+            return this.iSysParamService.getParam(param_key);
+        } catch (Exception e){
+            return ReturnInfo.error("获取失败");
+        }
+    }
+
 }

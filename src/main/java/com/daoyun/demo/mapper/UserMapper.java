@@ -39,4 +39,11 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Select("SELECT u.* FROM user u, login l WHERE l.token = #{token} and u.username = l.username")
     User getUserInfoByToken(String token);
+    @Select("select * from user where id in (select user_id from participate_in_course where course_code=#{course_code}" +
+            "and user_id in (select student_id from sign_log where sign_id=#{signIn_id}))")
+    List<User> getUserSignInCourse(String course_code, Integer signIn_id);
+
+    @Select("select * from user where id in (select user_id from participate_in_course where course_code=#{course_code}" +
+            "and user_id not in (select student_id from sign_log where sign_id=#{signIn_id}))")
+    List<User> getUserNotSignInCourse(String course_code, Integer signIn_id);
 }

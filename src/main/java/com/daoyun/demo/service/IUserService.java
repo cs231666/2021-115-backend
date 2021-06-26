@@ -50,4 +50,6 @@ public interface IUserService extends IService<User> {
     ReturnInfo getUserInfoByToken(HttpServletRequest request);
 
     ReturnInfo resetUserInfoByToken(UserInfo userInfo, HttpServletRequest request);
+
+    ReturnInfo forgotPassword(String username, String code);
 }
