@@ -69,4 +69,10 @@ public class SignInController {
         return signInService.getSignInInfoBySignInId(sign_id);
     }
 
+
+    @ApiOperation(value = "学生补签")
+    @PostMapping("/resign/{sign_id}/{student_id}")
+    public ReturnInfo resign(@PathVariable("sign_id") Integer sign_id, @PathVariable("student_id") Integer student_id){
+        return signInService.resign(sign_id, student_id);
+    }
 }

@@ -21,6 +21,6 @@ public interface SignInMapper extends BaseMapper<SignIn> {
     @Select("select * from sign_in where course_code = #{course_code}")
     List<SignIn> getAllByCourseCode(String course_code);
 
-    @Select("select u.realname, u.student_id, s.sign_time from user u left join sign_log s on u.student_id=s.student_id where sign_id=#{sign_id}")
+    @Select("select u.realname, u.student_id, s.sign_time, s.distance from user u left join sign_log s on u.student_id=s.student_id where sign_id=#{sign_id}")
     List<SignInfoDTO> getSignInfoById(Integer sign_id);
 }

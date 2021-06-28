@@ -8,6 +8,7 @@ import com.daoyun.demo.pojo.dto.CourseInfo;
 import com.daoyun.demo.pojo.dto.ParticipateInCourseDto;
 import com.daoyun.demo.service.ICourseService;
 import io.swagger.annotations.ApiOperation;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -163,5 +164,12 @@ public class CourseController {
             return ReturnInfo.error("查询失败");
         }
 
+    }
+
+    @ApiOperation("学生退出班课")
+    @SneakyThrows
+    @DeleteMapping("/quit/{course_code}/{student_id}")
+    public ReturnInfo quit(@PathVariable("course_code") String course_code, @PathVariable("student_id") String student_id){
+        return iCourseService.quit(course_code, student_id);
     }
 }

@@ -21,4 +21,5 @@ public interface ISignInService {
 
     ReturnInfo getSignInInfoBySignInId(Integer sign_id);
 
+    ReturnInfo resign(Integer sign_id, Integer student_id);
 }

@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.daoyun.demo.mapper.CourseMapper;
 import com.daoyun.demo.mapper.ParticipateInCourseMapper;
+import com.daoyun.demo.mapper.UserMapper;
 import com.daoyun.demo.pojo.Course;
 import com.daoyun.demo.pojo.ParticipateInCourse;
 import com.daoyun.demo.pojo.ReturnInfo;
@@ -44,6 +45,9 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
 
     @Autowired(required = false)
     private ParticipateInCourseMapper participateInCourseMapper;
+
+    @Autowired(required = false)
+    private UserMapper userMapper;
 
     @Override
     public ReturnInfo createCourse(CourseDto courseDto) {
@@ -220,5 +224,18 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     public ReturnInfo isEnd(String course_code) {
         Course course = courseMapper.selectOne(new QueryWrapper<Course>().eq("course_code", course_code));
         return ReturnInfo.success("查询成功", course.getIsEnd());
+    }
+
+    @Override
+    public ReturnInfo quit(String course_code, String student_id) {
+        User user = userMapper.selectOne(new QueryWrapper<User>().eq("student_id", student_id));
+        int delete = participateInCourseMapper.delete(new QueryWrapper<ParticipateInCourse>()
+                .eq("course_code", course_code)
+                .eq("user_id", user.getId())
+        );
+        if (delete == 0){
+            return ReturnInfo.error("学生退出班课失败");
+        }
+        return ReturnInfo.success("学生退出班课成功");
     }
 }

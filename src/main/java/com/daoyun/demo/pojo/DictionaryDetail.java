@@ -44,5 +44,6 @@ public class DictionaryDetail implements Serializable {
 
     private Integer seq;
 
+    private Integer parent;
 
 }

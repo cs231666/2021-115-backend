@@ -205,4 +205,64 @@ public class DictionaryDetailServiceImpl extends ServiceImpl<DictionaryDetailMap
         System.out.println(res.get(0));
         return ReturnInfo.success("查询成功", res);
     }
+
+    @Override
+    public ReturnInfo addSchool(String schoolName) {
+        DictionaryDetail dictionaryDetail;
+        dictionaryDetail = dictionaryDetailMapper.selectOne(new QueryWrapper<DictionaryDetail>().eq("name", schoolName));
+        if (dictionaryDetail != null){
+            return ReturnInfo.error("添加的学校已存在");
+        }
+        dictionaryDetail = new DictionaryDetail();
+        dictionaryDetail.setName(schoolName);
+        dictionaryDetail.setDictCode("School");
+        dictionaryDetail.setParent(0);
+        dictionaryDetailMapper.insert(dictionaryDetail);
+        return ReturnInfo.success("插入学校成功", dictionaryDetail);
+    }
+
+    @Override
+    public ReturnInfo addCollege(String schoolName, String college) {
+        DictionaryDetail schoolDetail = dictionaryDetailMapper.selectOne(new QueryWrapper<DictionaryDetail>().eq("name", schoolName));
+        DictionaryDetail collegeDetail;
+        collegeDetail = dictionaryDetailMapper.selectOne(new QueryWrapper<DictionaryDetail>().eq("name", college));
+        if (collegeDetail != null){
+            return ReturnInfo.error("院系已存在");
+        }
+        collegeDetail = new DictionaryDetail();
+        collegeDetail.setParent(schoolDetail.getDetailId());
+        collegeDetail.setDictCode("College");
+        collegeDetail.setName(college);
+        dictionaryDetailMapper.insert(collegeDetail);
+        return ReturnInfo.success("插入院系成功", collegeDetail);
+    }
+
+    @Override
+    public ReturnInfo updateSchool(Integer id, String name) {
+        DictionaryDetail schoolDetail = dictionaryDetailMapper.selectById(id);
+        schoolDetail.setName(name);
+        dictionaryDetailMapper.updateById(schoolDetail);
+        return ReturnInfo.success("更新学校名称成功", schoolDetail);
+    }
+
+    @Override
+    public ReturnInfo updateCollege(Integer id, String name) {
+        DictionaryDetail collegeDetail = dictionaryDetailMapper.selectById(id);
+        collegeDetail.setName(name);
+        dictionaryDetailMapper.updateById(collegeDetail);
+        return ReturnInfo.success("更新学院名称成功", collegeDetail);
+    }
+
+    @Override
+    public ReturnInfo deleteSchool(Integer id) {
+
+        dictionaryDetailMapper.deleteById(id);
+        return ReturnInfo.success("删除成功");
+    }
+
+    @Override
+    public ReturnInfo deleteCollege(Integer id) {
+        dictionaryDetailMapper.deleteById(id);
+        return ReturnInfo.success("删除成功");
+    }
 }

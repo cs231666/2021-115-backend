@@ -42,4 +42,5 @@ public interface ICourseService extends IService<Course> {
 
     ReturnInfo isEnd(String course_code);
 
+    ReturnInfo quit(String course_code, String student_id);
 }

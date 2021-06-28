@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.daoyun.demo.pojo.DictionaryDetail;
 import com.daoyun.demo.pojo.Login;
 import com.daoyun.demo.pojo.User;
+import com.daoyun.demo.pojo.dto.SignInfoDTO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -39,11 +40,12 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Select("SELECT u.* FROM user u, login l WHERE l.token = #{token} and u.username = l.username")
     User getUserInfoByToken(String token);
-    @Select("select * from user where id in (select user_id from participate_in_course where course_code=#{course_code}" +
-            "and user_id in (select student_id from sign_log where sign_id=#{signIn_id}))")
-    List<User> getUserSignInCourse(String course_code, Integer signIn_id);
 
-    @Select("select * from user where id in (select user_id from participate_in_course where course_code=#{course_code}" +
-            "and user_id not in (select student_id from sign_log where sign_id=#{signIn_id}))")
-    List<User> getUserNotSignInCourse(String course_code, Integer signIn_id);
+    @Select("select u.realname, u.student_id, sl.sign_time, sl.distance from user u left join participate_in_course p on u.id=p.user_id left join sign_log sl on u.student_id=sl.student_id where p.course_code=#{course_code} " +
+            "and sign_id=#{signIn_id}")
+    List<SignInfoDTO> getUserSignInCourse(String course_code, Integer signIn_id);
+
+    @Select("select u.realname, u.student_id from user u left join participate_in_course p on u.id=p.user_id where p.course_code=#{course_code} " +
+            "and u.student_id not in (select student_id from sign_log where sign_id=#{signIn_id})")
+    List<SignInfoDTO> getUserNotSignInCourse(String course_code, Integer signIn_id);
 }

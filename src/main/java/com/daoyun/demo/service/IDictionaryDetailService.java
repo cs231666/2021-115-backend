@@ -35,4 +35,16 @@ public interface IDictionaryDetailService extends IService<DictionaryDetail> {
     ReturnInfo getCollege(Integer parentId);
 
     ReturnInfo getTerm();
+
+    ReturnInfo addSchool(String schoolName);
+
+    ReturnInfo addCollege(String schoolName, String college);
+
+    ReturnInfo updateSchool(Integer id, String name);
+
+    ReturnInfo updateCollege(Integer id, String name);
+
+    ReturnInfo deleteSchool(Integer id);
+
+    ReturnInfo deleteCollege(Integer id);
 }

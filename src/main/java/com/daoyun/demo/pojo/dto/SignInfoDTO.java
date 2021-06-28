@@ -14,4 +14,5 @@ public class SignInfoDTO {
     private String realname;
     private String studentId;
     private Date signTime;
+    private Double distance;
 }

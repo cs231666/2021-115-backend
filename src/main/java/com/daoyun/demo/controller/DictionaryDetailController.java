@@ -102,4 +102,63 @@ public class DictionaryDetailController {
             return ReturnInfo.error("服务器内部错误，无法完成请求");
         }
     }
+
+    @ApiOperation("添加学校")
+    @PostMapping("add/{schoolName}")
+    public ReturnInfo addSchool(@PathVariable("schoolName") String schoolName){
+        try {
+            return this.iDictionaryDetailService.addSchool(schoolName);
+        } catch (Exception e){
+            return ReturnInfo.error("服务器内部错误，无法完成请求");
+        }
+    }
+    @ApiOperation("添加院系")
+    @PostMapping("add/{schoolName}/{college}")
+    public ReturnInfo addSchool(@PathVariable("schoolName") String schoolName, @PathVariable("college") String college){
+        try {
+            return this.iDictionaryDetailService.addCollege(schoolName, college);
+        } catch (Exception e){
+            return ReturnInfo.error("服务器内部错误，无法完成请求");
+        }
+    }
+
+    @ApiOperation("修改学校名称")
+    @PostMapping("updateSchool/{id}/{newSchoolName}")
+    public ReturnInfo updateSchool(@PathVariable("id") Integer id, @PathVariable("newSchoolName") String name){
+        try {
+            return this.iDictionaryDetailService.updateSchool(id, name);
+        } catch (Exception e){
+            return ReturnInfo.error("服务器内部错误，无法完成请求");
+        }
+    }
+    @ApiOperation("修改院系名称")
+    @PutMapping("updateCollege/{id}/{newCollegeName}")
+    public ReturnInfo updateCollege(@PathVariable("id") Integer id, @PathVariable("newCollegeName") String name){
+        try {
+            return this.iDictionaryDetailService.updateCollege(id, name);
+        } catch (Exception e){
+            return ReturnInfo.error("服务器内部错误，无法完成请求");
+        }
+    }
+
+    @ApiOperation("删除学校")
+    @PostMapping("deleteSchool/{id}")
+    public ReturnInfo deleteSchool(@PathVariable("id") Integer id){
+        try {
+            return this.iDictionaryDetailService.deleteSchool(id);
+        } catch (Exception e){
+            return ReturnInfo.error("服务器内部错误，无法完成请求");
+        }
+    }
+
+    @ApiOperation("删除院系")
+    @PostMapping("deleteCollege/{id}")
+    public ReturnInfo deleteCollege(@PathVariable("id") Integer id){
+        try {
+            return this.iDictionaryDetailService.deleteCollege(id);
+        } catch (Exception e){
+            return ReturnInfo.error("服务器内部错误，无法完成请求");
+        }
+    }
+
 }

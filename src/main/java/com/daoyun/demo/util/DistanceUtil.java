@@ -29,6 +29,6 @@ public class DistanceUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(DistanceUtil.GetDistance(22.3193039, 114.16936109999999, 22.3193039, 114.16936109000000));
+        System.out.println(DistanceUtil.GetDistance(22.3193039, 114.16936109999999, 26.065101093910325, 119.19664393236677));
     }
 }

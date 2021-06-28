@@ -26,4 +26,5 @@ public class SignLog implements Serializable {
     private Date sign_time;
     private Double longitude;
     private Double latitude;
+    private Double distance;
 }
