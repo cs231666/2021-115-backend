@@ -13,11 +13,11 @@ import java.util.Date;
 public class ParticipateInCourse {
 
     private Integer id;
-    private String course_code;
-    private Integer user_id;
+    private String courseCode;
+    private Integer userId;
     private Integer score;
-    private Date creation_date;
+    private Date creationDate;
     private Integer creator;
-    private Date modification_date;
+    private Date modificationDate;
     private String modifier;
 }

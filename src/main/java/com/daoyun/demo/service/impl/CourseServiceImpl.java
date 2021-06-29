@@ -197,11 +197,15 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         for(int index = 0; index < participateInCourses.size(); ++index){
             ParticipateInCourse pc = participateInCourses.get(index);
             if (index == 0){
+                if (pc.getUserId() == userId){
+                    score = pc.getScore();
+                    break;
+                }
                 continue;
             }else {
                 rank = pc.getScore() == participateInCourses.get(index-1).getScore() ? rank : rank+1;
             }
-            if (pc.getUser_id() == userId){
+            if (pc.getUserId() == userId){
                 score = participateInCourses.get(index).getScore();
                 break;
             }

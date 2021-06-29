@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.daoyun.demo.componet.AsyncStopSignIn;
 import com.daoyun.demo.mapper.*;
 import com.daoyun.demo.pojo.*;
-import com.daoyun.demo.pojo.dto.SignInDTO;
-import com.daoyun.demo.pojo.dto.SignInfoDTO;
-import com.daoyun.demo.pojo.dto.SignLogDTO;
-import com.daoyun.demo.pojo.dto.SignVo;
+import com.daoyun.demo.pojo.dto.*;
 import com.daoyun.demo.service.ISignInService;
 import com.daoyun.demo.util.DistanceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,11 +126,33 @@ public class SignInServiceImpl implements ISignInService {
         participateInCourse.setScore(participateInCourse.getScore() + Integer.parseInt(sysParam.getParamValue()));
         participateInCourseMapper.updateById(participateInCourse);
         SignLog signLog = new SignLog();
-        signLog.setStudent_id(student_id);
-        signLog.setSign_id(sign_id);
-        signLog.setSign_time(new Date());
+        signLog.setStudentId(student_id);
+        signLog.setSignId(sign_id);
+        signLog.setSignTime(new Date());
+        signLog.setDistance(.0);
         signLogMapper.insert(signLog);
         return ReturnInfo.success("补签成功", signLog);
+    }
+
+
+    @Override
+    public ReturnInfo getStudentSignInfoByCourseCode(String course_code, Integer student_id) {
+        List<SignIn> signInList = signInMapper.getStudentSignInfoByCourseCode(course_code, student_id);
+        List<SignIn> unSignInList = signInMapper.getStudentUnSignInfoByCourseCode(course_code, student_id);
+        List<SignInHelper> res = new ArrayList<>();
+        for (SignIn s : signInList){
+            SignInHelper signInHelper = new SignInHelper();
+            BeanUtil.copyProperties(s, signInHelper);
+            signInHelper.setSigned("已签到");
+            res.add(signInHelper);
+        }
+        for (SignIn s : unSignInList){
+            SignInHelper signInHelper = new SignInHelper();
+            BeanUtil.copyProperties(s, signInHelper);
+            signInHelper.setSigned("未签到");
+            res.add(signInHelper);
+        }
+        return ReturnInfo.success("成功获取学生指定班课的所有签到信息", res);
     }
 
     @Transactional
@@ -159,11 +178,11 @@ public class SignInServiceImpl implements ISignInService {
         participateInCourseMapper.updateById(participateInCourse);
         signLog = new SignLog();
         Double distance = DistanceUtil.GetDistance(signIn.getLatitude(), signIn.getLongitude(), signLogDTO.getLatitude(), signLogDTO.getLongitude());
-        signLog.setStudent_id(signLogDTO.getStudent_id());
-        signLog.setSign_id(signIn.getId());
+        signLog.setStudentId(signLogDTO.getStudent_id());
+        signLog.setSignId(signIn.getId());
         signLog.setLongitude(signLogDTO.getLongitude());
         signLog.setLatitude(signLogDTO.getLatitude());
-        signLog.setSign_time(new Date());
+        signLog.setSignTime(new Date());
         signLog.setDistance(distance);
         int ret = signLogMapper.insert(signLog);
         if (ret != 0){

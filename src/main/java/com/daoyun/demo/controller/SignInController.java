@@ -7,6 +7,7 @@ import com.daoyun.demo.pojo.dto.SignLogDTO;
 import com.daoyun.demo.service.ISignInService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -74,5 +75,12 @@ public class SignInController {
     @PostMapping("/resign/{sign_id}/{student_id}")
     public ReturnInfo resign(@PathVariable("sign_id") Integer sign_id, @PathVariable("student_id") Integer student_id){
         return signInService.resign(sign_id, student_id);
+    }
+
+    @ApiOperation("获取学生指定班课的所有签到信息")
+    @SneakyThrows
+    @GetMapping("/getStudentSignInfoByCourseCode/{course_code}/{student_id}")
+    public ReturnInfo getStudentSignInfoByCourseCode(@PathVariable("course_code") String course_code, @PathVariable("student_id") Integer student_id){
+        return signInService.getStudentSignInfoByCourseCode(course_code, student_id);
     }
 }

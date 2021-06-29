@@ -21,9 +21,9 @@ public class SignLog implements Serializable {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-    private Integer sign_id;
-    private Integer student_id;
-    private Date sign_time;
+    private Integer signId;
+    private Integer studentId;
+    private Date signTime;
     private Double longitude;
     private Double latitude;
     private Double distance;

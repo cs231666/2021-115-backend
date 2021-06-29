@@ -41,6 +41,7 @@ import java.util.Map;
  * @since 2021-05-06
  */
 @Service
+
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
     @Autowired
     private UserDetailsService userDetailsService;
@@ -270,6 +271,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         return ReturnInfo.error("密码重置失败，请重试");
 
+    }
+
+    @Override
+    public ReturnInfo getUsersByRoleId(Integer role_id) {
+        List<User> userList = userMapper.selectList(new QueryWrapper<User>().eq("role", role_id));
+        return ReturnInfo.success("成功获取指定角色用户", userList);
     }
 
     @Override

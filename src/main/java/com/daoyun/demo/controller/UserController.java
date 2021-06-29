@@ -8,6 +8,8 @@ import com.daoyun.demo.pojo.dto.RegisterDto;
 import com.daoyun.demo.pojo.dto.UserPasswordDto;
 import com.daoyun.demo.service.IUserService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -131,5 +133,13 @@ public class UserController {
     @DeleteMapping("/{username}")
     public ReturnInfo deleteUser(@PathVariable("username") String username) {
         return this.iUserService.deleteUser(username);
+    }
+
+    @ApiOperation("获取指定角色的用户")
+    @SneakyThrows
+    @GetMapping("getUsersByRoleId/{role_id}")
+    public ReturnInfo getUsersByRoleId(@PathVariable("role_id") Integer role_Id){
+        return this.iUserService.getUsersByRoleId(role_Id);
+
     }
 }
